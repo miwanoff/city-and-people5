@@ -41,6 +41,7 @@ add_action('init', [new Custom_Taxonomies(), 'cityandpeople_register_taxonomies_
 add_action('pre_get_posts', /*[new acf_filter_rating($query), */'acf_filter_rating', 1);
 add_action('pre_get_posts', /*[new acf_filter_rating($query), */'acf_filter_rating', 1);
 add_action('init', /*[new acf_filter_year($query), */'acf_filter_year', 1);
+add_action('wp_ajax_myfilter', [new Filter_dates(), 'my_filter_function']);
 //add_action('pre_get_posts', 'filter_year', 1);
 add_action('acf/init', [new My_Slider(), 'my_register_blocks']);
 add_action('acf/init', [new Options(), 'options']);

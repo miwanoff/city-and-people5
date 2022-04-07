@@ -43,7 +43,6 @@ if ($the_query->have_posts()) {
         print_r($meta_values);
         print_r($the_query->get_post_meta($post->ID, 'year', true));
         $the_query->the_post();
-
         get_template_part('partials/posts/content', 'excerpt');
     }
 } else {

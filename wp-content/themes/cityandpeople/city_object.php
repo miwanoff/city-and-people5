@@ -106,11 +106,15 @@ the_content();
 							'field' => 'id',
 							'include_children' => false, // нужно ли включать посты дочерних рубрик
 							'terms' => $cats_tags_or_taxes,
-							'operator' => 'IN' // если пост принадлежит хотя бы одной рубрике текущего поста, он будет отображаться в похожих записях, укажите значение AND и тогда похожие посты будут только те, которые принадлежат каждой рубрике текущего поста
+							'operator' => 'IN', // если пост принадлежит хотя бы одной рубрике текущего поста, он будет отображаться в похожих записях, укажите значение AND и тогда похожие посты будут только те, которые принадлежат каждой рубрике текущего поста
+							
 						)
-						)
+					),
+					'post__not_in' => array ($post->ID)
 				);
 				$my_query = new WP_Query( $args );
+				//echo " wpq: ";
+				//print_r ($my_query);
  
 				// если посты, удовлетворяющие нашим условиям, найдены
 				if( $my_query->have_posts() ) :
@@ -140,14 +144,15 @@ the_content();
 				//print_r (get_post_meta ($post->ID, "дата"));
 				//echo " sstrgpmpid: ".substr (get_post_meta ($post->ID, "дата") [0], 0, 4);
 				$args = array(
-				'post_type'  => 'city_object',
-				'meta_query' => array(
-				array(
-					'key'     => 'дата',
-					'value' => substr (get_post_meta ($post->ID, "дата") [0], 0, 4),
-					'compare' => 'LIKE'
-					)
-					)
+					'post_type'  => 'city_object',
+					'meta_query' => array(
+					array(
+						'key'     => 'дата',
+						'value' => substr (get_post_meta ($post->ID, "дата") [0], 0, 4),
+						'compare' => 'LIKE'
+						)
+					),
+					'post__not_in' => array ($post->ID)
 				);
 				//$query = new WP_Query( $args );
 				//echo " a ";

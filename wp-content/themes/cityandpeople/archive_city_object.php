@@ -12,10 +12,10 @@ get_header("v2");?>
     <div class="row">
         <!-- Blog Entries Column -->
         <div class="col-md-8">
-
+			<h2>Архів міських об'єктів</h2>
 			<div id="object_archive">
 				<?php $args = array(
-						'posts_per_page' => 4, // сколько похожих постов нужно вывести,
+						'posts_per_page' => 10, // сколько похожих постов нужно вывести,
 						'post_type' => 'city_object',
 						//'post_status' => 'public'
 					);

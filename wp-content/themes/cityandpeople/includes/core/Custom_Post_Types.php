@@ -143,5 +143,11 @@ class Custom_Post_Types
             'supports' => array('title', 'editor', 'comments', 'author', 'thumbnail'),
         );
         register_post_type('city_object', $args);
+		//register_taxonomy_for_object_type( 'city_object_taxonomy', 'city_object' );
     }
+}
+
+add_action( 'init', 'post_tag_for_pages' );
+function post_tag_for_pages(){
+	register_taxonomy_for_object_type( 'city_object_taxonomy', 'city_object');
 }
