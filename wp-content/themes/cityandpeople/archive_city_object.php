@@ -15,7 +15,7 @@ get_header("v2");?>
 
 			<div id="object_archive">
 				<?php $args = array(
-						'posts_per_page' => 4, // сколько похожих постов нужно вывести,
+						//'posts_per_page' => 4, // сколько похожих постов нужно вывести,
 						'post_type' => 'city_object',
 						//'post_status' => 'public'
 					);
