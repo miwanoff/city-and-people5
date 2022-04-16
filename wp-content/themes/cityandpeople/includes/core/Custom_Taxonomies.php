@@ -21,6 +21,9 @@ class Custom_Taxonomies
 				'new_item_name'     => __( 'New City Object Taxonomy' ),
 				'menu_name'         => __( 'City Object Taxonomy' ),
 			),
+            'show_admin_column' => true,
+            'show_in_rest' => true, // Needed for tax to appear in Gutenberg editor.
+            'hierarchical' => true,
 			'show_ui'       => true,
 			'query_var'     => true,
 		));

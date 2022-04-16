@@ -2,8 +2,8 @@
 if (function_exists('acf_add_local_field_group')):
 
     acf_add_local_field_group(array(
-        'key' => 'high-school-fields',
-        'title' => 'High School Fields',
+        'key' => __('high-school-fields'),
+        'title' => __('High School Fields'),
         'fields' => array(),
         'location' => array(
             array(

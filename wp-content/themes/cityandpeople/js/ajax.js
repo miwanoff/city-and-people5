@@ -108,6 +108,7 @@
 jQuery(function($){
 	$('#filter').submit(function(){
 		var filter = $('#filter');
+		console.log (" fs: " + filter.serialize());
 		$.ajax({
 			url:filter.attr('action'),
 			data:filter.serialize(), // form data
