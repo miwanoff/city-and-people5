@@ -141,6 +141,7 @@ class Custom_Post_Types
             'menu_icon' => get_stylesheet_directory_uri() . '/img/function_icon.png', // иконка в меню
             'menu_position' => 20,
             'supports' => array('title', 'editor', 'comments', 'author', 'thumbnail'),
+			'taxonomies' => array('post_tag', 'city_object_taxonomy')
         );
         register_post_type('city_object', $args);
     }

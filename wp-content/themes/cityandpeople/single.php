@@ -122,6 +122,10 @@
 					if ($i != count ($taxonomies) - 1)
 						echo ", ";
 				}
+				echo "<h3>";
+				_e ("Tags");
+				echo "</h3>";
+				the_tags('', ', ');
  
 				// если посты, удовлетворяющие нашим условиям, найдены
 				if( $my_query->have_posts() ) :
