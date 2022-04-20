@@ -31,6 +31,6 @@ if ($is_preview) {
 	        <?php endwhile;?>
     </div>
     <?php else: ?>
-    <p>Please add some slides.</p>
+    <p><?php _e("Please add some slides."); ?></p>
     <?php endif;?>
 </div>

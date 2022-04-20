@@ -11,6 +11,7 @@ class Custom_Fields_Type
         add_post_type_support('human', 'custom-fields');
         add_post_type_support('theatre', 'custom-fields');
         add_post_type_support('museum', 'custom-fields');
+        add_post_type_support('city-object', 'custom-fields');
     }
 
     public static function is_post_type($type)
