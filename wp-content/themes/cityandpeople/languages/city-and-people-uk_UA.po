@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: City-and-people 1.1\n"
-"POT-Creation-Date: 2022-04-25 18:58+0300\n"
-"PO-Revision-Date: 2022-04-25 19:24+0300\n"
+"POT-Creation-Date: 2022-04-30 11:50+0300\n"
+"PO-Revision-Date: 2022-04-30 13:18+0300\n"
 "Last-Translator: \n"
 "Language-Team: arhibober\n"
 "Language: uk\n"
@@ -92,7 +92,7 @@ msgstr "З: немавыдповіді@вашдомін.com\n"
 msgid "Please add some slides."
 msgstr "Будь ласка, додадіть будь-які слайди."
 
-#: city_object.php:91 single.php:82
+#: city_object.php:91
 msgid "Ключові дати"
 msgstr ""
 
@@ -301,6 +301,10 @@ msgstr "Що ви зараз хочете знайти?"
 #: searchform.php:5 searchform.php:10 searchform.php:12
 msgid "Search"
 msgstr "Пошук"
+
+#: single.php:82
+msgid "Key dates"
+msgstr ""
 
 #: single.php:116
 msgid "Object categories"

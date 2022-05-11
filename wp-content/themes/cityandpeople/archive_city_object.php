@@ -85,7 +85,7 @@ the_content();
 			<?PHP
 			}
 			?>
-			<div id="object_archive">
+			<div id="object_archive" class="row">
 				<?php $args = array(
 						//'posts_per_page' => 4, // сколько похожих постов нужно вывести,
 						'post_type' => 'city_object',

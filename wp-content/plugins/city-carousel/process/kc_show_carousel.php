@@ -19,9 +19,12 @@ function kc_show_carousel($content)
         'orderby' => 'date',
         'order' => 'DESC',
     ];
-	$args ["tax_query"][0]["taxonomy"] = "city_object_taxonomy";
-	$args ["tax_query"][0]["field"] = "name";
-	$args ["tax_query"][0]["terms"] = get_option('kc_category_name');
+	if (get_option('kc_category_name') != false)
+	{
+		$args ["tax_query"][0]["field"] = "name";
+		$args ["tax_query"][0]["taxonomy"] = "city_object_taxonomy";
+		$args ["tax_query"][0]["terms"] = get_option('kc_category_name');
+	}
  
 	//echo " a: ";
 	//print_r ($args);

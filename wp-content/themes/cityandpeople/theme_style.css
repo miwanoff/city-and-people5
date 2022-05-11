@@ -109,3 +109,34 @@ li.page-item {
 {
 	height: auto;
 }
+
+/*#object_archive .card
+{
+	width: 300px;
+	float: left;
+}*/
+
+.row div.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.row h4
+{
+	font-size: 1.5rem;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+.card-text:last-child {
+  margin-bottom: 0;
+}
+
+div.h-100.card
+{
+	height: auto !important;
+}

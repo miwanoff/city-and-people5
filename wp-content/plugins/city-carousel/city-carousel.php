@@ -36,3 +36,10 @@ function kc_show_carousel_shortcode($atts)
 }
 add_shortcode('kc_show_carousel', 'kc_show_carousel_shortcode');
 
+add_action('plugins_loaded', 'time_to_post_title_load_plugin_textdomain'); 
+function time_to_post_title_load_plugin_textdomain()
+{
+    load_plugin_textdomain('city-carousel', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+}
+
+
