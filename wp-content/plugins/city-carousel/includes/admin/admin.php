@@ -10,7 +10,10 @@ function kc_create_menu() {
 function register_kc_settings() {
     //register our settings
     register_setting( 'kc-settings-group', 'kc_post_type' );
-    register_setting( 'kc-settings-group', 'kc_category_name' );
+	if ($_POST ["kc_category_name"] != "all")
+		register_setting( 'kc-settings-group', 'kc_category_name' );
+	else
+		delete_option ('kc_category_name');
     register_setting( 'kc-settings-group', 'kc_tag' );
 	register_setting('kc-settings-group', 'kc_count');
 }
@@ -41,8 +44,10 @@ function kc_settings_page() {
                 <th scope="row"><?php _e("Category Name"); ?></th>
                 <td>
                     <select name="kc_category_name" id="kc_category_name">
+						<option value="all"><?php _e ("All Categories"); ?></option>
                         <?php foreach ($kc_categories as $kc_category) {
-							echo '<option value="' . $kc_category->name . '" ' . selected(get_option('kc_category_name'), $kc_category->name) . '>' . ($kc_category->name ? $kc_category->name : "none") . '</option>';
+							if ($kc_category->name)
+								echo '<option value="' . $kc_category->name . '" ' . selected(get_option('kc_category_name'), $kc_category->name) . '>' . $kc_category->name . '</option>';
 						}
 					?>
                     </select>

@@ -63,10 +63,6 @@
 				edit_post_link();
 			?>
             <hr>
-            <!-- Tag cloud -->
-			
-            <?php the_tags('', ', ');?>
-            <hr>
 			
             <!-- Pagination -->
             <ul class="pagination justify-content-center mb-4">
@@ -83,7 +79,7 @@
 				//print_r ($date_symbol);
 				//echo "<b>Ключові дати</b>: ".substr (get_post_meta ($post->ID, "дата") [0], 6, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 4, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 0, 4);
 				echo "<b>";
-				_e("Ключові дати");
+				_e("Key dates");
 				echo "</b>: ".get_field ("дата");
 				// необязательно, но в некоторых случаях без этого не обойтись
 				global $post;
@@ -108,31 +104,41 @@
 						)
 					),
 					'post__not_in' => array ($post->ID)
-				);
+				);				
+				//echo " gtid: ".get_the_ID ();
 				$my_query = new WP_Query( $args );
+				$taxonomies = "";
 				$taxonomies = get_the_terms( get_the_ID(), 'city_object_taxonomy' );
-				echo "<h3>";
-				_e ("Object categories");
-				echo "</h3>";
-				$i = 0;
+				//echo " t: ";
+				//print_r ($taxonomies);
+				if ($taxonomies != "")
+				{
+					echo "<h3>";
+						_e ("Object Categories");
+					echo "</h3>";
+					$i = 0;
  
-				// так как функция вернула массив, то логично будет прокрутить его через foreach()
-				foreach( $taxonomies as $taxonomy ){
-					echo '<a href="' . get_term_link( $taxonomy ) . '">' . $taxonomy->name . '</a>';
-					if ($i != count ($taxonomies) - 1)
-						echo ", ";
+					// так как функция вернула массив, то логично будет прокрутить его через foreach()
+					foreach( $taxonomies as $taxonomy ){
+						echo '<a href="' . get_term_link( $taxonomy ) . '">' . $taxonomy->name . '</a>';
+						if ($i != count ($taxonomies) - 1)
+							echo ", ";
+					}
 				}
-				echo "<h3>";
-				_e ("Tags");
-				echo "</h3>";
-				the_tags('', ', ');
+				if (has_tag ())
+				{
+					echo "<h3>";
+					_e ("Tags");
+					echo "</h3>";
+					the_tags('', ', ');
+				}
  
 				// если посты, удовлетворяющие нашим условиям, найдены
 				if( $my_query->have_posts() ) :
 					
 					// выводим заголовок блока похожих постов
 					echo "<h3>";
-					_e("Similar objects");
+					_e("Similar Objects");
 					echo "</h3>";
 					
 					// запускаем цикл
@@ -179,7 +185,7 @@
 					
 					// выводим заголовок блока похожих постов
 					echo "<h3>";
-					_e("Similar in date objects");
+					_e("Similar in date Objects");
 					echo "</h3>";
 					
 					// запускаем цикл
@@ -227,33 +233,6 @@
 			<?php endif;
 			//echo " gfm: ";
 			//1print_r (get_field ("мапа"));
-			if (get_post_meta($post->ID, 'мапа', true) !== '')
-			{
-				echo "<h3>";
-				_e("Map");
-				echo "</h3><br/>";
-				$iframe = get_field('мапа');
-
-				// Use preg_match to find iframe src.
-				preg_match('/src="(.+?)"/', $iframe, $matches);
-				$src = $matches[1];
-
-				// Add extra parameters to src and replace HTML.
-				$params = array(
-					'controls'  => 0,
-					'hd'        => 1,
-					'autohide'  => 1
-				);
-				$new_src = add_query_arg($params, $src);
-				$iframe = str_replace($src, $new_src, $iframe);
-
-				// Add extra attributes to iframe HTML.
-				$attributes = 'frameborder="0"';
-				$iframe = str_replace('></iframe>', ' ' . $attributes . '></iframe>', $iframe);
-
-				// Display customized HTML.
-				echo $iframe;
-			}
 			if (get_post_meta($post->ID, 'виноски', true) !== '')
 			{
 				echo "<h3>";
@@ -268,8 +247,188 @@
 				echo "</h3><br/>
 					<a href='".get_field ("дивись_також") ["url"]."'>".get_field ("дивись_також") ["title"]."</a>";
 			}
-			?>
+			if (strstr (get_the_content(), "map_center"))
+			{
+				$wide = strstr (substr (strstr (get_the_content (), "map_center"), 12, strlen (strstr (get_the_content (), "map_center")) - 12), ",", true);
+				$long = strstr (substr (strstr (strstr (get_the_content (), "map_center"), ","), 1, strlen (strstr (strstr (get_the_content (), "map_center"), ",")) - 1), '"', true);
+				delete_post_meta ($post->ID, "широта");
+				delete_post_meta ($post->ID, "довгота");
+				add_post_meta ($post->ID, "широта", $wide);
+				add_post_meta ($post->ID, "довгота", $long);
+				$args = array
+				(
+					"post_type" => "city_object",
+					"post__not_in" => array ($post->ID)
+				);
+				//echo " w ".$wide. " l: ".$long;
+				//echo " gtid: ".get_the_ID ();
+				$my_query = new WP_Query ($args);
+				if ($my_query->have_posts())
+				{
+					$near = 50000000;
+					$title = "";
+					$link = "";
+					while ($my_query->have_posts())
+					{
+						$my_query->the_post();
+						//echo " n: ".$near." mqppt: ".$my_query->post->post_title." gpmqpid: ".get_permalink ($my_query->post->ID)." m";
+						if (strstr ($my_query->post->post_content, "map_center"))
+						{
+							$wide_near = strstr (substr (strstr ($my_query->post->post_content, "map_center"), 12, strlen (strstr (get_the_content (), "map_center")) - 12), ",", true);
+							$long_near = strstr (substr (strstr (strstr ($my_query->post->post_content, "map_center"), ","), 1, strlen (strstr (strstr (get_the_content (), "map_center"), ",")) - 1), '"', true);	
+							$is_near = 12742000 * asin (sqrt (pow (sin (($wide_near - $wide) * pi () / 360), 2) + cos ($wide_near * pi () / 180) * cos ($wide * pi () / 180) * pow (sin (($long_near - $long) * pi () / 360), 2)));
+							//echo " wn: ".$wide_near." ln: ".$long_near." in: ".$is_near;
+							if ($is_near < $near)
+							{
+								$title = $my_query->post->post_title;
+								$link = get_permalink ($my_query->post->ID);
+								$near = $is_near;
+							}
+						}
+					}
+					echo "<h3>";
+					_e ("The nearest Object");
+					echo "</h3>
+					<a href = '".$link."'>".$title."</a>";
+					wp_reset_postdata ();
+				}
+			}			
+			//global $post;
+			//echo " pid: ".$post->ID;
+			$terms = get_the_terms ($post->ID, "city_object_taxonomy");
+			$args = array ();
+			$args ["post_type"] = "city_object";
+			$args ["tax_query"][0]["taxonomy"] = "city_object_taxonomy";
+			$args ["post__not_in"] = array ($post->ID);
+			//echo " t: ";
+			//print_r ($terms);
+			foreach ($terms as $term)
+			//{
+				//echo " tp: ".$term->parent." gattid0: ".get_ancestors ($term->term_id) [0]." gtbsztcottid: ".get_term_by ("slug", "zviazuiuchi-taksonomii", "city_object_taxonomy")->term_id;
+				if ($term->parent == get_term_by ("slug", "zviazuiuchi-taksonomii", "city_object_taxonomy")->term_id)
+					$args ["tax_query"][0]["terms"][] = $term->term_id;
+			//}
+			$my_query = new WP_Query ($args);
+			//echo " a: ";
+			//print_r ($args);
+			if ($my_query->have_posts())
+			{
+				echo "<h3>";
+				echo _e ("Connected Posts");
+				echo "</h3>";
+				while ($my_query->have_posts())
+				{
+					$my_query->the_post();
+					echo "<a href = '".get_permalink ($my_query->post->ID)."'>".$my_query->post->post_title."</a>";
+				}
+				wp_reset_postdata ();
+			}
+			if ((!is_object_in_term ($post->ID, "city_object_taxonomy", "dokument")) && (!is_object_in_term ($post->ID, "city_object_taxonomy", "liudyna")))
+			{
+				if (get_post_meta($post->ID, 'мапа', true) !== '')
+				{
+					echo "<h3>";
+					_e("Map");
+					echo "</h3><br/>";
+					$iframe = get_field('мапа');
 
+					// Use preg_match to find iframe src.
+					preg_match('/src="(.+?)"/', $iframe, $matches);
+					$src = $matches[1];
+
+					// Add extra parameters to src and replace HTML.
+					$params = array(
+						'controls'  => 0,
+						'hd'        => 1,
+						'autohide'  => 1
+					);
+					$new_src = add_query_arg($params, $src);
+					$iframe = str_replace($src, $new_src, $iframe);
+
+					// Add extra attributes to iframe HTML.
+					$attributes = 'frameborder="0"';
+					$iframe = str_replace('></iframe>', ' ' . $attributes . '></iframe>', $iframe);
+
+					// Display customized HTML.
+					echo $iframe;
+				}			
+				if (get_post_meta($post->ID, 'широта', true) !== '')
+				{
+					echo "<h3>";
+					_e("Latitude");
+					echo "</h3><br/>".get_field('широта');
+				}			
+				if (get_post_meta($post->ID, 'довгота', true) !== '')
+				{
+					echo "<h3>";
+					_e("Longitude");
+					echo "</h3><br/>".get_field('довгота');
+				}
+			}
+			if (is_object_in_term ($post->ID, "city_object_taxonomy", "liudyna"))
+			{				
+				if (get_post_meta($post->ID, 'дата_народження', true) !== '')
+				{
+					echo "<h3>";
+					_e("Birthday");
+					echo "</h3><br/>".get_field('дата_народження');
+				}			
+				if (get_post_meta($post->ID, 'місце_народження', true) !== '')
+				{
+					echo "<h3>";
+					_e("Place of Birth");
+					echo "</h3><br/>".get_field('місце_народження');
+				}		
+				if (get_post_meta($post->ID, 'дата_смерті', true) !== '')
+				{
+					echo "<h3>";
+					_e("Date of Die");
+					echo "</h3><br/>".get_field('дата_смерті');
+				}		
+				if (get_post_meta($post->ID, 'місце_смерті', true) !== '')
+				{
+					echo "<h3>";
+					_e("Place of Die");
+					echo "</h3><br/>".get_field('місце_смерті');
+				}
+			}
+			if (is_object_in_term ($post->ID, "city_object_taxonomy", "budynok"))
+			{				
+				if (get_post_meta($post->ID, 'адреса', true) !== '')
+				{
+					echo "<h3>";
+					_e("Address");
+					echo "</h3><br/>".get_field('адреса');
+				}			
+				if (get_post_meta($post->ID, 'висота', true) !== '')
+				{
+					echo "<h3>";
+					_e("Height");
+					echo "</h3><br/>".get_field('висота');
+				}		
+			}
+			if (is_object_in_term ($post->ID, "city_object_taxonomy", "vnz"))
+			{				
+				if (get_post_meta($post->ID, 'список_факультетів', true) !== '')
+				{
+					echo "<h3>";
+					_e("Facultaty List");
+					echo "</h3><br/>".get_field('список_факультетів');
+				}			
+				if (get_post_meta($post->ID, 'рейтинг', true) !== '')
+				{
+					echo "<h3>";
+					_e("Rating");
+					echo "</h3><br/>".get_field('рейтинг');
+				}		
+				if (get_post_meta($post->ID, 'список_ректорів', true) !== '')
+				{
+					echo "<h3>";
+					_e("Rectors' List");
+					echo "</h3><br/>".get_field('список_ректорів');
+				}
+			}
+			?>
 
             <!-- Post Single - Author End -->
 
@@ -409,11 +568,5 @@
 </div>
 <!-- /.container -->
 
-<?php get_sidebar('second') /* sidebar-second.php */?>
-
-
-<?php
-
-?>
 
 <?php get_footer();

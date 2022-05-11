@@ -88,7 +88,7 @@ the_content();
 				//print_r ($date_symbol);
 				//echo "<b>Ключові дати</b>: ".substr (get_post_meta ($post->ID, "дата") [0], 6, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 4, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 0, 4);
 				echo "<b>";
-				_e("Ключові дати");
+				_e("Key dates");
 				echo "</b>: ".get_field ("дата");
 				// необязательно, но в некоторых случаях без этого не обойтись
 				global $post;

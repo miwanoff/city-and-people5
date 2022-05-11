@@ -28,6 +28,7 @@ class enqueue
         wp_enqueue_script('cityandpeople_bootstrap');
         wp_enqueue_script('cityandpeople_ajax');
         wp_enqueue_style('style', get_stylesheet_uri());
+		load_theme_textdomain('city-and-people', $url . '/languages');
 
     }
 }

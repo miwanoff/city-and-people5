@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: City-and-people 1.1\n"
-"POT-Creation-Date: 2022-04-25 18:58+0300\n"
-"PO-Revision-Date: 2022-04-25 19:24+0300\n"
+"POT-Creation-Date: 2022-05-09 12:48+0300\n"
+"PO-Revision-Date: 2022-05-09 13:06+0300\n"
 "Last-Translator: \n"
 "Language-Team: arhibober\n"
 "Language: uk\n"
@@ -92,9 +92,9 @@ msgstr "З: немавыдповіді@вашдомін.com\n"
 msgid "Please add some slides."
 msgstr "Будь ласка, додадіть будь-які слайди."
 
-#: city_object.php:91 single.php:82
-msgid "Ключові дати"
-msgstr ""
+#: city_object.php:91
+msgid "Key dates"
+msgstr "Ключові дати"
 
 #: city_object.php:124 single.php:140
 msgid "Similar objects"
@@ -144,13 +144,9 @@ msgstr "<h5 class=\"card-header\">Залишить коментар</span>:"
 msgid "Comments"
 msgstr "Коментарі"
 
-#: includes/acf-fields.php:5
-msgid "high-school-fields"
-msgstr ""
-
 #: includes/acf-fields.php:6
 msgid "High School Fields"
-msgstr ""
+msgstr "Поля об'єкту ВНЗ"
 
 #: includes/core/Cpt_Gutenberg_Support.php:65
 #: includes/core/Cpt_Gutenberg_Support.php:66
