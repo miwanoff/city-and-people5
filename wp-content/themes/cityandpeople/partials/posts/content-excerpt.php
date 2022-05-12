@@ -6,10 +6,6 @@
 }?>
     <div class="card h-100">
         <h4 class="card-header"><a href="<?php the_permalink()?>"><?php the_title()?></a></h4>
-		<div class="card-body">
-			<p class="card-text"><?php the_excerpt()?></p>
-			<!-- <a href="#" class="btn btn-primary">Read More &rarr;</a> -->
-		</div>
 		<div class="card-footer text-muted">
 			<?php _e ("Post category:"); echo " "; the_category(" ")?>
 			<?php _e ("Posted on"); echo " ".get_the_date()." "; _e ("by"); ?> 
