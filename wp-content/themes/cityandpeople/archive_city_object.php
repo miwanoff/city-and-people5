@@ -151,7 +151,7 @@ the_content();
 				}*/
 				?>
 				<button><?php _e("Apply filter"); ?></button>
-				<input type="hidden" name="action" value="myfilter">
+				<input type="hidden" name="action" value="myfilter"/>
 			</form>
         </div>
         <?php get_sidebar();?>

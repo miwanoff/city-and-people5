@@ -100,9 +100,10 @@
  
 				// так как функция вернула массив, то логично будет прокрутить его через foreach()
 				foreach( $taxonomies as $taxonomy ){
-					echo '<a href="' . get_term_link( $taxonomy ) . '">' . $taxonomy->name . '</a>';
+					echo '<a href="' . get_term_link( $taxonomy ) . '">' . $taxonomy->name . '</a>';					
 					if ($i != count ($taxonomies) - 1)
 						echo ", ";
+					$i++;
 				}
 			}
 			if (has_tag ())
@@ -215,15 +216,53 @@
 				delete_post_meta ($post->ID, "довгота");
 				add_post_meta ($post->ID, "широта", $wide);
 				add_post_meta ($post->ID, "довгота", $long);
+				echo "<h3>";
+				_e ("The Nearest Objects");
+				echo "</h3>					
+				<p>";
+				_e ("Choose a diapason");
+				echo "</p>
+				<form action='".site_url()."/wp-admin/admin-ajax.php' method='POST' id='diapason_form'>
+				<input type='range' name='diapason' id='diapason' min='0' max='10'>
+				<span id='range_value'>5</span>&nbsp;";
+				_e ("km");
+				echo "<input type='hidden' name='current_id' value='".$post->ID."'/>
+				<input type='hidden' name='action' id='action' value='my_nearest'>
+				<div id='nearest'>";
 				$args = array
 				(
 					"post_type" => "city_object",
 					"post__not_in" => array ($post->ID)
 				);
+				$wide = strstr (substr (strstr (get_the_content (null, null, $_POST ["current_id"]), "map_center"), 12, strlen (strstr (get_the_content (null, null, $_POST ["current_id"]), "map_center")) - 12), ",", true);
+				$long = strstr (substr (strstr (strstr (get_the_content (null, null, $_POST ["current_id"]), "map_center"), ","), 1, strlen (strstr (strstr (get_the_content (null, null, $_POST ["current_id"]), "map_center"), ",")) - 1), '"', true);
 				$my_query = new WP_Query ($args);
+				usort
+				(
+					$my_query->posts,
+					function ($post1, $post2) use ($wide, $long)
+					{
+						if ((strstr ($post1->post_content, "map_center")) && (strstr ($post2->post_content, "map_center")))
+						{
+							$wide_near1 = strstr (substr (strstr ($post1->post_content, "map_center"), 12, strlen (strstr ($post1->post_content, "map_center")) - 12), ",", true);
+							$long_near1 = strstr (substr (strstr (strstr ($post1->post_content, "map_center"), ","), 1, strlen (strstr (strstr ($post1->post_content, "map_center"), ",")) - 1), '"', true);	
+							$is_near1 = 12742000 * asin (sqrt (pow (sin (($wide_near1 - $wide) * pi () / 360), 2) + cos ($wide_near1 * pi () / 180) * cos ($wide * pi () / 180) * pow (sin (($long_near1 - $long) * pi () / 360), 2)));
+							$wide_near2 = strstr (substr (strstr ($post2->post_content, "map_center"), 12, strlen (strstr ($post2->post_content, "map_center")) - 12), ",", true);
+							$long_near2 = strstr (substr (strstr (strstr ($post2->post_content, "map_center"), ","), 1, strlen (strstr (strstr ($post2->post_content, "map_center"), ",")) - 1), '"', true);	
+							$is_near2 = 12742000 * asin (sqrt (pow (sin (($wide_near1 - $wide) * pi () / 360), 2) + cos ($wide_near1 * pi () / 180) * cos ($wide * pi () / 180) * pow (sin (($long_near1 - $long) * pi () / 360), 2)));
+							if ($is_near1 == $is_near2)
+								return -1;
+							if ($is_near > $is_near2)
+								return 0;
+							if ($is_near < $is_near2)
+								return -1;
+						}
+					}						
+				);
+				//echo " mq: ";
+				//print_r ($my_query);
 				if ($my_query->have_posts())
 				{
-					$near = PHP_FLOAT_MAX;
 					$title = "";
 					$link = "";
 					while ($my_query->have_posts())
@@ -231,23 +270,23 @@
 						$my_query->the_post();;
 						if (strstr ($my_query->post->post_content, "map_center"))
 						{
-							$wide_near = strstr (substr (strstr ($my_query->post->post_content, "map_center"), 12, strlen (strstr (get_the_content (), "map_center")) - 12), ",", true);
-							$long_near = strstr (substr (strstr (strstr ($my_query->post->post_content, "map_center"), ","), 1, strlen (strstr (strstr (get_the_content (), "map_center"), ",")) - 1), '"', true);	
-							$is_near = 12742000 * asin (sqrt (pow (sin (($wide_near - $wide) * pi () / 360), 2) + cos ($wide_near * pi () / 180) * cos ($wide * pi () / 180) * pow (sin (($long_near - $long) * pi () / 360), 2)));
-							if ($is_near < $near)
+							$wide_near = strstr (substr (strstr ($my_query->post->post_content, "map_center"), 12, strlen (strstr ($my_query->post->post_content, "map_center")) - 12), ",", true);
+							$long_near = strstr (substr (strstr (strstr ($my_query->post->post_content, "map_center"), ","), 1, strlen (strstr (strstr ($my_query->post->post_content, "map_center"), ",")) - 1), '"', true);	
+							$distance_near = 12742 * asin (sqrt (pow (sin (($wide_near - $wide) * pi () / 360), 2) + cos ($wide_near * pi () / 180) * cos ($wide * pi () / 180) * pow (sin (($long_near - $long) * pi () / 360), 2)));
+							if ($distance_near <= 5)
 							{
 								$title = $my_query->post->post_title;
 								$link = get_permalink ($my_query->post->ID);
-								$near = $is_near;
+								echo "<a href = '".$link."'>".$title."</a> - ".$distance_near."&nbsp;";
+								_e ("km");
+								echo "<br/>";
+								wp_reset_postdata ();
 							}
 						}
 					}
-					echo "<h3>";
-					_e ("The nearest Object");
-					echo "</h3>
-					<a href = '".$link."'>".$title."</a>";
-					wp_reset_postdata ();
 				}
+				echo "</div>
+				</form>";
 			}
 			$terms = get_the_terms ($post->ID, "city_object_taxonomy");
 			$args = array ();

@@ -36,9 +36,9 @@ class Voices
             $relation_result = $wpdb->get_results("INSERT INTO likes VALUES (" . get_the_ID() . "," . $_SERVER["REMOTE_ADDR"] . ")");
             wp_localize_script('jquery', 'is_like', "false");
         }
-        wp_send_json_success(array(
+        /*wp_send_json_success(array(
             'count' => $relation_result,
-        ));
+        ));*/
 
     }
 }

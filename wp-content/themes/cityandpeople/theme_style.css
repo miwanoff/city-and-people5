@@ -140,3 +140,8 @@ div.h-100.card
 {
 	height: auto !important;
 }
+
+.row .col-md-8
+{
+	top: 30px;
+}
