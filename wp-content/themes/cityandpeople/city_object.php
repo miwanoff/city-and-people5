@@ -87,7 +87,9 @@ the_content();
 				//echo " ds: ";
 				//print_r ($date_symbol);
 				//echo "<b>Ключові дати</b>: ".substr (get_post_meta ($post->ID, "дата") [0], 6, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 4, 2).$date_symbol [0].substr (get_post_meta ($post->ID, "дата") [0], 0, 4);
-				echo "<b>Ключові дати</b>: ".get_field ("дата");
+				echo "<b>";
+				_e("Key dates");
+				echo "</b>: ".get_field ("дата");
 				// необязательно, но в некоторых случаях без этого не обойтись
 				global $post;
  
@@ -118,7 +120,9 @@ the_content();
 				if( $my_query->have_posts() ) :
 					
 					// выводим заголовок блока похожих постов
-					echo '<h3>Схожі об\'єкти</h3>';
+					echo "<h3>";
+					_e("Similar objects");
+					echo "</h3>";
 					
 					// запускаем цикл
 					while( $my_query->have_posts() ) : $my_query->the_post();
@@ -163,7 +167,9 @@ the_content();
 				if( $my_query->have_posts() ) :
 					
 					// выводим заголовок блока похожих постов
-					echo '<h3>Об\'єкти, близькі за датою</h3>';
+					echo "<h3>";
+					_e("Similar in date objects";
+					echo "</h3>";
 					
 					// запускаем цикл
 					while( $my_query->have_posts() ) : $my_query->the_post();
@@ -212,7 +218,9 @@ if( $images ): ?>
 //1print_r (get_field ("мапа"));
 if (get_post_meta($post->ID, 'мапа', true) !== '')
 {
-	echo "<h3>Мапа</h3><br/>";
+	echo "<h3>";
+	_e("Map");
+	echo "</h3><br/>";
 	$iframe = get_field('мапа');
 
 	// Use preg_match to find iframe src.
@@ -236,11 +244,20 @@ if (get_post_meta($post->ID, 'мапа', true) !== '')
 	echo $iframe;
 }
 if (get_post_meta($post->ID, 'виноски', true) !== '')
-	echo "<h3>Виноски</h3><br/>
+{
+	echo "<h3>";
+	_e("Footnotes");
+	echo "</h3><br/>
 		<a href='".get_field ("виноски") ["url"]."'>".get_field ("виноски") ["title"]."</a>";
+}
 if (get_post_meta($post->ID, 'дивись_також', true) !== '')
-	echo "<h3>Дивись також</h3><br/>
-		<a href='".get_field ("дивись_також") ["url"]."'>".get_field ("дивись_також") ["title"]."</a>";	?>
+{
+	echo "<h3>";
+	_e("See also");
+	echo "</h3><br/>
+		<a href='".get_field ("дивись_також") ["url"]."'>".get_field ("дивись_також") ["title"]."</a>";
+}		?>
+
 
             <!-- Post Single - Author End -->
 

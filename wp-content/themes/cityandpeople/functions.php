@@ -17,6 +17,7 @@ include get_theme_file_path('includes/core/Custom_Fields_Type.php');
 include get_theme_file_path('includes/filters/Acf_Filter_Rating.php');
 include get_theme_file_path('includes/filters/Acf_Filter_Year.php');
 include get_theme_file_path('includes/filters/Filter_dates.php');
+include get_theme_file_path('includes/core/My_nearest_objects.php');
 
 //include get_theme_file_path('includes/filter_year.php');
 //include get_theme_file_path('includes/acf-slider.php');
@@ -24,7 +25,8 @@ include get_theme_file_path('includes/core/My_Slider.php');
 include get_theme_file_path('includes/core/Cpt_Gutenberg_Support.php');
 include get_theme_file_path('includes/core/Gutenberg_Template_To_Single_Post.php');
 include get_theme_file_path('includes/core/Flickr_Cache.php');
-//include get_theme_file_path('includes/core/Voices.php');
+include get_theme_file_path('includes/core/Hierarchical.php');
+include get_theme_file_path('includes/core/Voices.php');
 // Hooks
 add_action('wp_enqueue_scripts', [new Enqueue(), 'cityandpeople_enqueue']);
 add_action('after_setup_theme', [new Setup(), 'cityandpeople_setup_theme']);
@@ -50,10 +52,12 @@ add_action('init', [new Gutenberg_Template_To_Single_Post(), 'gutenberg_template
 //add_action('init', [new Flickr_Cache(), 'get_User_ID']);
 add_action('init', [new Flickr_Cache(), 'get_API_Key']);
 add_action('init', [new Flickr_Cache(), 'get_API_Secret']);
-add_action('wp_ajax_myfilter', 'my_filter_function'); // wp_ajax_{ACTION HERE} 
-add_action('wp_ajax_nopriv_myfilter', 'my_filter_function');
-//add_action('wp_enqueue_scripts', [new Voices(), 'blog_js'], 99);
-/*add_action('rest_api_init', function () {
+add_action('wp_ajax_myfilter', [new Filter_dates, 'my_filter_function']); // wp_ajax_{ACTION HERE} 
+add_action('wp_ajax_nopriv_myfilter', [new Filter_dates, 'my_filter_function']);
+add_action('wp_ajax_my_nearest', [new My_nearest_objects, 'my_nearest_function']); // wp_ajax_{ACTION HERE} 
+add_action('wp_ajax_nopriv_my_nearest', [new My_nearest_objects, 'my_nearest_function']);
+add_action('wp_enqueue_scripts', [new Voices(), 'blog_js'], 99);
+add_action('rest_api_init', function () {
 
     //echo "hhh";
     register_rest_route('example/v2', '/likes/(?P<id>\d+)', array(
@@ -61,6 +65,6 @@ add_action('wp_ajax_nopriv_myfilter', 'my_filter_function');
         'callback' => array("Voices", 'example__like'),
     ));
 
-});*/
+});
 
 // Shortcodes
